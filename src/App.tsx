@@ -22,21 +22,32 @@ export const App = () => {
   }, [])
 
   const onDrop = (files: File[]) => {
-    console.log(files)
+    const formData = new FormData();
+    files.forEach(file => {
+      formData.append('files', file);
+    })
+
+    fetch(`${apiUrl}/bookings/batch`, {
+      method: 'POST',
+      body: formData
+    })
   }
 
   return (
     <div className='App'>
       <div className='App-header'>
-        <Dropzone accept='.csv' onDrop={onDrop}>
-        {({getRootProps, getInputProps}) => (
-          <section>
-            <div {...getRootProps()}>
-              <input {...getInputProps()} />
-              <p>Drop some files here, or click to select files</p>
-            </div>
-          </section>
-        )}
+        <Dropzone
+          accept='.csv'
+          onDrop={onDrop}
+        >
+          {({ getRootProps, getInputProps }) => (
+            <section>
+              <div {...getRootProps()}>
+                <input {...getInputProps()} />
+                <p>Drop some files here, or click to select files</p>
+              </div>
+            </section>
+          )}
         </Dropzone>
       </div>
       <div className='App-main'>
