@@ -9,18 +9,14 @@ const bookings = JSON.parse(fs.readFileSync('./server/bookings.json')).map(
   }),
 )
 
-const bookingsController = () => {
-  const router = Router();
+const bookingsRouter = Router()
 
-  router.get('/', (_, res) => {
-    res.json(bookings)
-  })
+bookingsRouter.get('/', (_, res) => {
+  res.json(bookings)
+})
 
-  router.post('/batch', (_, res) => {
-    
-  });
+bookingsRouter.post('/batch', (req, res) => {
+  console.log(req)
+});
 
-  return router;
-}
-
-export default bookingsController;
+module.exports = bookingsRouter
