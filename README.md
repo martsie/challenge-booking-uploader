@@ -32,3 +32,7 @@ What needs to be added / changed:
 - The server needs to allow this `POST` request (`/bookings`) from app and update the booking list it has in memory (and therefore the list it returns for the existing `GET` request). There is no need to modify the server to use an actual database instead of storing the data in memory.
 
 Feel free to change any of the existing code (and add any dependencies) to achieve the required specifications / functionality. There is no need to support old browsers, assume a recent version of Firefox/Chrome. If you're having trouble starting or need help with any part, please send us an email and we'll give you a pointer.
+
+
+### Explanations for implementation
+- Batch endpoint - did some research at https://diegosucaria.info/handling-batch-operations-with-rest-apis/. Some recommendations for REST patterns are to use `POST /{resource}/batch` or `POST /batch/{resource}`. Using `POST /batch/{resource}` comes with the added benefit of being able to easily group and abstract away batch operations to longer running tasks but comes with a security risk (in my opinion) or keeping the resource abstracted from the batch operation (if there's middleware attached to the resource actions it needs to be reapplied) so decision was made to use `POST /{resource}/batch`.
