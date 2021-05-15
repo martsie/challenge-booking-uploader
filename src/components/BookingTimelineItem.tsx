@@ -26,8 +26,10 @@ const BookingTimelineItem: React.FC<BookingTimelineItemProps> = (props) => {
   return (
     <button
       className={classes.join(' ')}
-      onClick={booking.isDraft ? () => onSelect(booking) : undefined}
+      onClick={() => onSelect(booking)}
       type="button"
+      role="checkbox"
+      aria-checked={isActive}
     >
       <h2 className="booking-timeline-item__user">User: {booking.userId}</h2>
       <p className="booking-timeline-item__date">{format(booking.date, 'h:mmaaa')}</p>

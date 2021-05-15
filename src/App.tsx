@@ -90,6 +90,10 @@ export const App = () => {
   }
 
   const toggleSelectedDraftBooking = (booking: Booking) => {
+    if (!booking.isDraft) {
+      return;
+    }
+
     if (doesBookingOverlap(booking)) {
       alert(`This booking overlaps with another booking`);
       return;
