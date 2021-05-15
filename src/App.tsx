@@ -42,18 +42,44 @@ export const App = () => {
       return (index !== bookingIndex && areIntervalsOverlapping(bookingInterval, bookingIntervals[bookingIndex]));
     })
   };
-
-
-  useEffect(() => {
+  
+  const fetchLatestBookings = () => {
     fetch(`${apiUrl}/bookings`)
       .then((response) => response.json())
       .then(processBookingResponse)
       .then(setBookings)
+  }
+
+  useEffect(() => {
+    fetchLatestBookings();
   }, [])
 
   const onDrop = async (files: File[]) => {
     const bookingGroups: Booking[][] = await Promise.all(files.map(convertCSVToBookings));
     setDraftBookings(draftBookings.slice(0).concat(...bookingGroups));
+  }
+  
+  const presentError = (e: Error) => {
+    alert(e.message);
+  }
+  
+  const onSaveEvents = async () => {
+    try {
+      const response = await fetch(`${apiUrl}/bookings/batch`, {
+        method: 'POST',
+        body: JSON.stringify(selectedDraftBookings),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      if (response.status === 422) {
+        const responseJson = await response.json();
+        throw new Error(responseJson.message);
+      }
+      fetchLatestBookings();
+    } catch (e) {
+      presentError(e);
+    }
   }
 
   const toggleSelectedDraftBooking = (booking: Booking) => {
@@ -107,7 +133,7 @@ export const App = () => {
       </div>
       {selectedDraftBookings.length > 0 && (
         <div className="App-toolbar">
-          <Button>
+          <Button onClick={onSaveEvents}>
             {pluralise('Save @count selected event', 'Save @count selected events', selectedDraftBookings.length)}
           </Button>
         </div>

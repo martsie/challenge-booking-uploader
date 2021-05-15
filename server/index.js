@@ -4,6 +4,7 @@ const bookingsRouter = require('./routers/bookingsRouter')
 
 const app = express()
 app.use(cors()) // so that app can access
+app.use(express.json());
 
 app.use('/bookings', bookingsRouter)
 

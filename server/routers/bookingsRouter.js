@@ -12,7 +12,11 @@ bookingsRouter.get('/', (_, res) => {
 
 
 bookingsRouter.post('/batch', (req, res, next) => {
-  
+  res.status(422).json({
+    message: 'Issue',
+  });
+  console.log(req.body);
+  res.json({ success: true });
 });
 
 module.exports = bookingsRouter
