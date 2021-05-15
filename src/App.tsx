@@ -20,6 +20,7 @@ const processBookingResponse = (bookingRecords: BookingRecord[]) => {
 export const App = () => {
   const [bookings, setBookings] = useState<Booking[]>([])
   const [draftBookings, setDraftBookings] = useState<Booking[]>([])
+  const [selectedDraftBookings, setSelectedDraftBookings] = useState<Booking[]>([]);
   
   const sortedBookings = useMemo(() => {
     return bookings.slice(0).concat(draftBookings).sort((a, b) => a.date.getTime() > b.date.getTime() ? 1 : -1);
@@ -53,6 +54,18 @@ export const App = () => {
     const bookingGroups:Booking[][] = await Promise.all(files.map(convertCSVToBookings));
     setDraftBookings(draftBookings.slice(0).concat(...bookingGroups));
   }
+  
+  const toggleSelectedDraftBooking = (booking: Booking) => {
+    const currentIndex = selectedDraftBookings.indexOf(booking);
+    if (currentIndex > -1) {
+      const newDraftBookings = selectedDraftBookings.slice(0);
+      newDraftBookings.splice(currentIndex, 1)
+      setSelectedDraftBookings(newDraftBookings);
+    }
+    else {
+      setSelectedDraftBookings([...selectedDraftBookings, booking]);
+    }
+  }
 
   return (
     <div className='App'>
@@ -80,6 +93,8 @@ export const App = () => {
             <BookingTimelineItem
               booking={booking}
               isValid={bookings.includes(booking) || !doesBookingOverlap(booking)}
+              onSelect={toggleSelectedDraftBooking}
+              isActive={selectedDraftBookings.includes(booking)}
             />
           )}
         />

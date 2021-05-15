@@ -6,9 +6,6 @@
   border-style: solid;
   padding: 8px;
   color: #392C71;
-}
-
-.booking-timeline-item--current {
   border-color: #6637FF;
   background-color: #F3F0FF;
 }
@@ -16,8 +13,14 @@
 .booking-timeline-item--draft {
   border-color: #8B96BB;
   background-color: white;
+  cursor: pointer;
 }
 .booking-timeline-item--error {
   border-color: #FD179B;
   background-color: #FFEAF6;
+  cursor: not-allowed;
+}
+.booking-timeline-item--active {
+  border-color: #137BFA;
+  background-color: #E6F3FF;
 }
