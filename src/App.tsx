@@ -103,22 +103,6 @@ export const App = () => {
           )}
         />
       </div>
-      <div className='App-main'>
-        <p>Existing bookings:</p>
-        {sortedBookings.map((booking, i) => {
-          const date = booking.date;
-          const duration = booking.duration / (60 * 1000)
-          return (
-            <p key={i} className='App-booking'>
-              <span className='App-booking-time'>{date.toString()}</span>
-              <span className='App-booking-duration'>
-                {duration.toFixed(1)}
-              </span>
-              <span className='App-booking-user'>{booking.userId}</span>
-            </p>
-          )
-        })}
-      </div>
     </div>
   )
 }

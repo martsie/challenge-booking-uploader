@@ -14,7 +14,8 @@ interface TimelineProps<D extends DataItem> {
   itemWidthMsMultipler: number;
 }
 
-const verticalBufferBetweenTimelineItems = 20;
+const VERTICAL_BUFFER_BETWEEN_TIMELINE_ITEMS = 20;
+const HEADER_HEIGHT = 80;
 
 function Timeline<D extends DataItem>(props: TimelineProps<D>) {
   const { items, itemHeight, itemWidthMsMultipler } = props;
@@ -49,7 +50,7 @@ function Timeline<D extends DataItem>(props: TimelineProps<D>) {
         <div
           style={{
             width: `${timelineTotalSeconds * itemWidthMsMultipler}px`,
-            height: `${(itemHeight * items.length)}px`,
+            height: `${(itemHeight * items.length) + (VERTICAL_BUFFER_BETWEEN_TIMELINE_ITEMS * items.length) + HEADER_HEIGHT}px`,
           }}
           className="timeline"
         >
@@ -73,9 +74,9 @@ function Timeline<D extends DataItem>(props: TimelineProps<D>) {
             <div
               className="timeline__item-wrapper"
               style={{
-                height: `${itemHeight + verticalBufferBetweenTimelineItems}px`,
-                transform: `translateY(${(itemHeight * index) + (verticalBufferBetweenTimelineItems * index)}px)`,
-                padding: `${verticalBufferBetweenTimelineItems / 2}px 0`,
+                height: `${itemHeight + VERTICAL_BUFFER_BETWEEN_TIMELINE_ITEMS}px`,
+                transform: `translateY(${(itemHeight * index) + (VERTICAL_BUFFER_BETWEEN_TIMELINE_ITEMS * index)}px)`,
+                padding: `${VERTICAL_BUFFER_BETWEEN_TIMELINE_ITEMS / 2}px 0`,
               }}
             >
               <div

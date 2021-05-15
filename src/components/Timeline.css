@@ -12,6 +12,7 @@
   flex: 1;
   border-radius: 8px;
   border: 2px solid #eee;
+  -webkit-overflow-scrolling: touch;
 }
 .timeline {
   position: relative;
