@@ -1,26 +1,11 @@
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect } from 'react'
 import Dropzone from 'react-dropzone'
-import { eachDayOfInterval, addDays } from 'date-fns';
 import './App.css'
+import BookingTimelineItem from './components/BookingTimelineItem';
 import Timeline from './components/Timeline';
+import { Booking, BookingRecord } from './types/Booking';
 
 const apiUrl = 'http://localhost:3001'
-
-type Seconds = number;
-
-type BookingBase = {
-  duration: Seconds;
-  userId: string;
-  isNew: boolean;
-}
-
-type BookingRecord = BookingBase & {
-  time: string;
-}
-
-type Booking = BookingBase & {
-  date: Date;
-}
 
 export const App = () => {
   const [bookings, setBookings] = useState<Booking[]>([])
@@ -52,8 +37,6 @@ export const App = () => {
       .then(sortAndSetBookings)
   }
 
-  
-
   return (
     <div className='App'>
       <div className='App-header'>
@@ -77,10 +60,7 @@ export const App = () => {
           itemHeight={80}
           itemWidthMsMultipler={0.00001}
           renderItem={(booking) => (
-            <div>
-              User: {booking.userId}
-              {booking.isNew ? 'Is new! ' : 'Not new!'}
-            </div>
+            <BookingTimelineItem booking={booking} />
           )}
         />
       </div>

@@ -1,13 +1,19 @@
 .timeline-wrapper {
   width: 100%;
   overflow-x: auto;
+  box-shadow: 0 0 15px rgba(0,0,0,0.3);
+  background: white;
+  border-radius: 8px;
+  margin-top: 20px;
 }
 .timeline {
   position: relative;
-  background: #eee;
   transition: height 0.3s;
 }
-.timeline__item {
+.timeline__item-wrapper {
   position: absolute;
-  background: white;
+  width: 100%;
+  border-bottom: 3px solid #eee;
+}
+.timeline__item {
 }

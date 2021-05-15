@@ -14,6 +14,8 @@ interface TimelineProps<D extends DataItem> {
   itemWidthMsMultipler: number;
 }
 
+const verticalBufferBetweenTimelineItems = 20;
+
 function Timeline<D extends DataItem>(props: TimelineProps<D>) {
   const { items, itemHeight, itemWidthMsMultipler } = props;
 
@@ -46,20 +48,29 @@ function Timeline<D extends DataItem>(props: TimelineProps<D>) {
       <div
         style={{
           width: `${timelineTotalSeconds * itemWidthMsMultipler}px`,
-          height: `${items.length * itemHeight}px`
+          height: `${(itemHeight * items.length)}px`,
         }}
         className="timeline"
       >
         {sortedItems.map((sortedItem, index) => (
           <div
+            className="timeline__item-wrapper"
             style={{
-              height: `${itemHeight}px`,
-              width: `${sortedItem.duration * itemWidthMsMultipler}px`,
-              transform: `translateX(${(sortedItem.date.getTime() - startTime) * itemWidthMsMultipler}px) translateY(${itemHeight * index}px)`
+              height: `${itemHeight + verticalBufferBetweenTimelineItems}px`,
+              transform: `translateY(${(itemHeight * index) + (verticalBufferBetweenTimelineItems * index)}px)`,
+              padding: `${verticalBufferBetweenTimelineItems / 2}px 0`,
             }}
-            className="timeline__item"
           >
-            {props.renderItem(sortedItem)}
+            <div
+              style={{
+                height: `${itemHeight}px`,
+                width: `${sortedItem.duration * itemWidthMsMultipler}px`,
+                transform: `translateX(${(sortedItem.date.getTime() - startTime) * itemWidthMsMultipler}px)`
+              }}
+              className="timeline__item"
+            >
+              {props.renderItem(sortedItem)}
+            </div>
           </div>
         ))}
       </div>

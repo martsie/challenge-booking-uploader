@@ -1,0 +1,17 @@
+.booking-timeline-item {
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
+  border-width: 3px;
+  border-style: solid;
+  padding: 8px;
+}
+
+.booking-timeline-item--current {
+  border-color: #6637FF;
+  background-color: #F3F0FF;
+}
+
+.booking-timeline-item--new {
+  
+}
