@@ -10,7 +10,7 @@ const BookingTimelineItem: React.FC<BookingTimelineItemProps> = (props) => {
   return (
     <div className="booking-timeline-item booking-timeline-item--current">
       User: {booking.userId}
-      {booking.isNew ? 'Is new! ' : 'Not new!'}
+      {booking.isDraft ? 'Is draft' : ''}
     </div>
   );
 };

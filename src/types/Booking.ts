@@ -3,7 +3,7 @@ export type Seconds = number;
 export type BookingBase = {
   duration: Seconds;
   userId: string;
-  isNew: boolean;
+  isDraft?: boolean;
 }
 
 export type BookingRecord = BookingBase & {

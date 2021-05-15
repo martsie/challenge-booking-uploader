@@ -1,40 +1,40 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import Dropzone from 'react-dropzone'
 import './App.css'
 import BookingTimelineItem from './components/BookingTimelineItem';
 import Timeline from './components/Timeline';
 import { Booking, BookingRecord } from './types/Booking';
+import convertCSVToBookings from './utils/convertCSVToBookings';
 
-const apiUrl = 'http://localhost:3001'
+const apiUrl = 'http://localhost:3001';
+
+const processBookingResponse = (bookingRecords: BookingRecord[]) => {
+  return bookingRecords.map(({ time, ...restOfBookingRecord }) => ({
+    date: new Date(time),
+    ...restOfBookingRecord,
+  }));
+}
 
 export const App = () => {
   const [bookings, setBookings] = useState<Booking[]>([])
-
-  const sortAndSetBookings = (bookingRecords: BookingRecord[]) => {
-    bookingRecords.sort((a, b) => a.time > b.time ? 1 : -1);
-    setBookings(bookingRecords.map(({ time, ...restOfBookingRecord }) => ({
-      date: new Date(time),
-      ...restOfBookingRecord,
-    })));
-  }
+  const [draftBookings, setDraftBookings] = useState<Booking[]>([])
+  
+  const sortedBookings = useMemo(() => {
+    return bookings.slice(0).concat(draftBookings).sort((a, b) => a.date.getTime() > b.date.getTime() ? 1 : -1);
+  }, [bookings, draftBookings]);
+  
+  console.log(sortedBookings, 'sorted bookings');
 
   useEffect(() => {
     fetch(`${apiUrl}/bookings`)
       .then((response) => response.json())
-      .then(sortAndSetBookings)
+      .then(processBookingResponse)
+      .then(setBookings)
   }, [])
 
   const onDrop = async (files: File[]) => {
-    const formData = new FormData()
-    files.forEach(file => {
-      formData.append('files', file)
-    })
-
-    fetch(`${apiUrl}/bookings/batch`, {
-      method: 'POST',
-      body: formData
-    }).then(response => response.json())
-      .then(sortAndSetBookings)
+    const bookingGroups:Booking[][] = await Promise.all(files.map(convertCSVToBookings));
+    setDraftBookings(draftBookings.slice(0).concat(...bookingGroups));
   }
 
   return (
@@ -56,7 +56,7 @@ export const App = () => {
       </div>
       <div className="timeline">
         <Timeline<Booking>
-          items={bookings}
+          items={sortedBookings}
           itemHeight={80}
           itemWidthMsMultipler={0.00001}
           renderTimelineItem={(booking) => (
@@ -71,7 +71,7 @@ export const App = () => {
       </div>
       <div className='App-main'>
         <p>Existing bookings:</p>
-        {bookings.map((booking, i) => {
+        {sortedBookings.map((booking, i) => {
           const date = booking.date;
           const duration = booking.duration / (60 * 1000)
           return (
