@@ -40,14 +40,16 @@ export const App = () => {
     const bookingIndex = sortedBookings.indexOf(booking);
     return bookingIntervals.some((bookingInterval, index) => {
       return (index !== bookingIndex && areIntervalsOverlapping(bookingInterval, bookingIntervals[bookingIndex]));
-    })
+    });
   };
   
-  const fetchLatestBookings = () => {
-    fetch(`${apiUrl}/bookings`)
+  const fetchLatestBookings = async () => {
+    const newBookings = await fetch(`${apiUrl}/bookings`)
       .then((response) => response.json())
-      .then(processBookingResponse)
-      .then(setBookings)
+      .then(processBookingResponse);
+    setBookings(newBookings);
+    setDraftBookings([]);
+    setSelectedDraftBookings([]);
   }
 
   useEffect(() => {
@@ -65,9 +67,14 @@ export const App = () => {
   
   const onSaveEvents = async () => {
     try {
+      const bookingInputToSubmit = selectedDraftBookings.map(booking => ({
+        user_id: booking.userId,
+        duration: booking.duration / 60 / 1000,
+        time: booking.date.toISOString(),
+      }));
       const response = await fetch(`${apiUrl}/bookings/batch`, {
         method: 'POST',
-        body: JSON.stringify(selectedDraftBookings),
+        body: JSON.stringify(bookingInputToSubmit),
         headers: {
           'Content-Type': 'application/json',
         },

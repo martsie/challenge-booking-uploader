@@ -10,12 +10,15 @@ bookingsRouter.get('/', (_, res) => {
   res.json(bookingsStore.getData())
 })
 
-
 bookingsRouter.post('/batch', (req, res, next) => {
-  res.status(422).json({
-    message: 'Issue',
-  });
-  console.log(req.body);
+  try {
+    bookingsStore.addBookings(req.body);
+  }
+  catch (e) {
+    res.status(422).json({
+      message: e.message,
+    });
+  }
   res.json({ success: true });
 });
 

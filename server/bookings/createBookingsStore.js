@@ -1,8 +1,11 @@
-const { isBookingRecordValid } = require('../bookings/validation')
+const { isBookingRecordValid, doesBookingRecordOverlap } = require('../bookings/validation')
 
 const addBooking = (store) => (bookingRecord) => {
   if (!isBookingRecordValid(bookingRecord)) {
     throw new Error(`Booking record is invalid. Provided with: ${JSON.stringify(bookingRecord)}`)
+  }
+  if (doesBookingRecordOverlap(bookingRecord, store)) {
+    throw new Error(`Booking overlaps: ${JSON.stringify(bookingRecord)}`);
   }
 
   store.push({
