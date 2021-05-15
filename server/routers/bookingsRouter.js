@@ -41,7 +41,8 @@ bookingsRouter.post('/batch', upload.array('files'), (req, res, next) => {
     .on('end',function() {
       if (index === csvFiles.length - 1) {
         try {
-          res.json(bookingsStore.addBookings(bookingsData))
+          bookingsStore.addBookings(bookingsData)
+          res.json(bookingsStore.getData())
         } catch (e) {
           next(e);
         }

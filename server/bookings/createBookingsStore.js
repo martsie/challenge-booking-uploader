@@ -1,5 +1,11 @@
 const { isBookingRecordValid } = require('../bookings/validation')
 
+const sortStore = (store) => {
+  store.sort((a, b) => a.time > b.time ? 1 : -1);
+  
+  return store;
+}
+
 const addBooking = (store) => (bookingRecord) => {
   if (!isBookingRecordValid(bookingRecord)) {
     throw new Error(`Booking record is invalid. Provided with: ${JSON.stringify(bookingRecord)}`)
@@ -28,7 +34,7 @@ function createBookingsStore(initialData) {
   return {
     addBookings: addBookings(store),
     addBooking: addBooking(store),
-    getData: () => store,
+    getData: () => sortStore(store),
   };
 }
 
