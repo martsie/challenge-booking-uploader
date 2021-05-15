@@ -10,6 +10,7 @@
 .booking-timeline-item--current {
   border-color: #6637FF;
   background-color: #F3F0FF;
+  color: #392C71;
 }
 
 .booking-timeline-item--new {

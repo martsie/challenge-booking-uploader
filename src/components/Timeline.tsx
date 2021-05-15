@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { isAfter, eachDayOfInterval, startOfDay, addDays } from 'date-fns';
+import { isAfter, eachDayOfInterval, startOfDay, addDays, format } from 'date-fns';
 import './Timeline.css';
 
 interface DataItem {
@@ -9,7 +9,8 @@ interface DataItem {
 
 interface TimelineProps<D extends DataItem> {
   items: D[];
-  renderItem: (item: D) => React.ReactElement;
+  renderTimelineItem: (item: D) => React.ReactElement;
+  renderInfoItem: (item: D) => React.ReactElement;
   itemHeight: number;
   itemWidthMsMultipler: number;
 }
@@ -30,9 +31,6 @@ function Timeline<D extends DataItem>(props: TimelineProps<D>) {
   const firstItem = sortedItems[0];
   const lastItem = sortedItems[sortedItems.length - 1];
 
-  const startTime = sortedItems[0].date.getTime();
-  const endTime = lastItem.date.getTime() + lastItem.duration;
-
   const firstDate = firstItem.date;
   const lastDate = lastItem.date;
 
@@ -41,38 +39,59 @@ function Timeline<D extends DataItem>(props: TimelineProps<D>) {
     end: startOfDay(addDays(new Date(lastDate), 1)),
   });
 
+  const startTime = dayDates[0].getTime();
+  const endTime = dayDates[dayDates.length - 1].getTime();
+
   const timelineTotalSeconds = endTime - startTime;
 
   return (
     <div className="timeline-wrapper">
-      <div
-        style={{
-          width: `${timelineTotalSeconds * itemWidthMsMultipler}px`,
-          height: `${(itemHeight * items.length)}px`,
-        }}
-        className="timeline"
-      >
-        {sortedItems.map((sortedItem, index) => (
+      <div className="timeline-scroller">
+        <div
+          style={{
+            width: `${timelineTotalSeconds * itemWidthMsMultipler}px`,
+            height: `${(itemHeight * items.length)}px`,
+          }}
+          className="timeline"
+        >
           <div
-            className="timeline__item-wrapper"
-            style={{
-              height: `${itemHeight + verticalBufferBetweenTimelineItems}px`,
-              transform: `translateY(${(itemHeight * index) + (verticalBufferBetweenTimelineItems * index)}px)`,
-              padding: `${verticalBufferBetweenTimelineItems / 2}px 0`,
-            }}
+            className="timeline__header"
           >
-            <div
-              style={{
-                height: `${itemHeight}px`,
-                width: `${sortedItem.duration * itemWidthMsMultipler}px`,
-                transform: `translateX(${(sortedItem.date.getTime() - startTime) * itemWidthMsMultipler}px)`
-              }}
-              className="timeline__item"
-            >
-              {props.renderItem(sortedItem)}
-            </div>
+            {dayDates.slice(0, dayDates.length - 1).map((dayDate, index) => (
+              <div
+                style={{
+                  transform: `translateX(${(dayDate.getTime() - startTime) * itemWidthMsMultipler}px)`,
+                  width: `${(dayDates[index + 1].getTime() - dayDate.getTime()) * itemWidthMsMultipler}px`,
+                }}
+                className="timeline__header-item"
+              >
+                <span className="timeline__header-item-day">{format(dayDate, 'd')}</span>
+                <span className="timeline__header-item-month">{format(dayDate, 'MMMM')}</span>
+              </div>
+            ))}
           </div>
-        ))}
+          {sortedItems.map((sortedItem, index) => (
+            <div
+              className="timeline__item-wrapper"
+              style={{
+                height: `${itemHeight + verticalBufferBetweenTimelineItems}px`,
+                transform: `translateY(${(itemHeight * index) + (verticalBufferBetweenTimelineItems * index)}px)`,
+                padding: `${verticalBufferBetweenTimelineItems / 2}px 0`,
+              }}
+            >
+              <div
+                style={{
+                  height: `${itemHeight}px`,
+                  width: `${sortedItem.duration * itemWidthMsMultipler}px`,
+                  transform: `translateX(${(sortedItem.date.getTime() - startTime) * itemWidthMsMultipler}px)`
+                }}
+                className="timeline__item"
+              >
+                {props.renderTimelineItem(sortedItem)}
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

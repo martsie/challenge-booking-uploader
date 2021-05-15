@@ -59,8 +59,13 @@ export const App = () => {
           items={bookings}
           itemHeight={80}
           itemWidthMsMultipler={0.00001}
-          renderItem={(booking) => (
+          renderTimelineItem={(booking) => (
             <BookingTimelineItem booking={booking} />
+          )}
+          renderInfoItem={(booking) => (
+            <div>
+              UserId: {booking.userId}
+            </div>
           )}
         />
       </div>

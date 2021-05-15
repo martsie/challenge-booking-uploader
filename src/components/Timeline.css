@@ -1,10 +1,17 @@
 .timeline-wrapper {
-  width: 100%;
-  overflow-x: auto;
+  display: flex;
   box-shadow: 0 0 15px rgba(0,0,0,0.3);
   background: white;
   border-radius: 8px;
   margin-top: 20px;
+  padding: 10px;
+}
+.timeline-scroller {
+  width: 100%;
+  overflow-x: auto;
+  flex: 1;
+  border-radius: 8px;
+  border: 2px solid #eee;
 }
 .timeline {
   position: relative;
@@ -13,7 +20,36 @@
 .timeline__item-wrapper {
   position: absolute;
   width: 100%;
-  border-bottom: 3px solid #eee;
+  border-bottom: 3px solid #EAECF2;
+}
+.timeline__item-wrapper:last-child {
+  border-bottom: none;
 }
 .timeline__item {
+}
+.timeline__header {
+  background: #F9FAFD;
+  height: 80px;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  border-bottom: 3px solid #EAECF2;
+}
+.timeline__header-item {
+  position: absolute;
+  height: 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-right: 3px solid #EAECF2;
+}
+.timeline__header-item:last-child {
+  border-right: none;
+}
+.timeline__header-item-day {
+  font-weight: bold;
+}
+.timeline__header-item-month {
+
 }
