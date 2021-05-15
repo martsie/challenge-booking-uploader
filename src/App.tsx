@@ -6,7 +6,7 @@ import BookingTimelineItem from './components/BookingTimelineItem';
 import Timeline from './components/Timeline';
 import Button from './components/widgets/Button';
 import { Booking, BookingRecord } from './types/Booking';
-import convertCSVToBookings from './utils/convertCSVToBookings';
+import convertCSVToDraftBookings from './utils/convertCSVToDraftBookings';
 import pluralise from './utils/pluralise';
 
 const apiUrl = 'http://localhost:3001';
@@ -57,7 +57,7 @@ export const App = () => {
   }, [])
 
   const onDrop = async (files: File[]) => {
-    const bookingGroups: Booking[][] = await Promise.all(files.map(convertCSVToBookings));
+    const bookingGroups: Booking[][] = await Promise.all(files.map(convertCSVToDraftBookings));
     setDraftBookings(draftBookings.slice(0).concat(...bookingGroups));
   }
   

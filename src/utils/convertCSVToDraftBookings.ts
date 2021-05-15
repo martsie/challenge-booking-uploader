@@ -1,7 +1,7 @@
 import { Booking, BookingRecord } from '../types/Booking'
 import csvParse from 'csv-parse';
 
-const convertCSVToBookings = async (csvFile: File): Promise<Booking[]> => {
+const convertCSVToDraftBookings = async (csvFile: File): Promise<Booking[]> => {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
   
@@ -28,4 +28,4 @@ const convertCSVToBookings = async (csvFile: File): Promise<Booking[]> => {
   });
 };
 
-export default convertCSVToBookings;
+export default convertCSVToDraftBookings;
