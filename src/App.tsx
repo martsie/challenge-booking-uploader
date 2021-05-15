@@ -56,6 +56,10 @@ export const App = () => {
   }
   
   const toggleSelectedDraftBooking = (booking: Booking) => {
+    if (doesBookingOverlap(booking)) {
+      return;
+    }
+
     const currentIndex = selectedDraftBookings.indexOf(booking);
     if (currentIndex > -1) {
       const newDraftBookings = selectedDraftBookings.slice(0);
