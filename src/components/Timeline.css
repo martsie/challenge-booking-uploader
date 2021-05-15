@@ -5,6 +5,7 @@
 .timeline {
   position: relative;
   background: #eee;
+  transition: height 0.3s;
 }
 .timeline__item {
   position: absolute;

@@ -1,12 +1,6 @@
 const { isBookingRecordValid } = require('../bookings/validation')
 
-const sortStore = (store) => {
-  store.sort((a, b) => a.time > b.time ? 1 : -1);
-  
-  return store;
-}
-
-const addBooking = (store) => (bookingRecord) => {
+const addBooking = (store) => (bookingRecord, isNew = true) => {
   if (!isBookingRecordValid(bookingRecord)) {
     throw new Error(`Booking record is invalid. Provided with: ${JSON.stringify(bookingRecord)}`)
   }
@@ -15,13 +9,14 @@ const addBooking = (store) => (bookingRecord) => {
     time: Date.parse(bookingRecord.time),
     duration: bookingRecord.duration * 60 * 1000, // mins into ms
     userId: bookingRecord.user_id,
+    isNew,
   })
   
   return store
 };
 
-const addBookings = (store) => (data) => {
-  data.forEach(addBooking(store))
+const addBookings = (store) => (data, isNew = true) => {
+  data.forEach(item => addBooking(store)(item, isNew));
   
   return store
 }
@@ -29,7 +24,7 @@ const addBookings = (store) => (data) => {
 function createBookingsStore(initialData) {
   const store = [];
 
-  addBookings(store)(initialData)
+  addBookings(store)(initialData, false)
 
   return {
     addBookings: addBookings(store),

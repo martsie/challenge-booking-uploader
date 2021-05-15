@@ -11,6 +11,7 @@ type Seconds = number;
 type BookingBase = {
   duration: Seconds;
   userId: string;
+  isNew: boolean;
 }
 
 type BookingRecord = BookingBase & {
@@ -71,8 +72,16 @@ export const App = () => {
         </Dropzone>
       </div>
       <div className="timeline">
-        <Timeline
+        <Timeline<Booking>
           items={bookings}
+          itemHeight={80}
+          itemWidthMsMultipler={0.00001}
+          renderItem={(booking) => (
+            <div>
+              User: {booking.userId}
+              {booking.isNew ? 'Is new! ' : 'Not new!'}
+            </div>
+          )}
         />
       </div>
       <div className='App-main'>

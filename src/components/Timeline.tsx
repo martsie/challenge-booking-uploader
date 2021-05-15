@@ -7,17 +7,15 @@ interface DataItem {
   duration: number;
 }
 
-interface TimelineProps<D = DataItem> {
-  items: DataItem[];
-  // renderItem: (item: D) => React.ReactElement;
+interface TimelineProps<D extends DataItem> {
+  items: D[];
+  renderItem: (item: D) => React.ReactElement;
+  itemHeight: number;
+  itemWidthMsMultipler: number;
 }
 
-
-const TIMELINE_ITEM_HEIGHT = 80;
-const TIMELINE_ITEM_WIDTH_MS_TIME_MULTIPLIER = 0.00001;
-
-function Timeline<D = DataItem>(props: TimelineProps<D>) {
-  const { items } = props;
+function Timeline<D extends DataItem>(props: TimelineProps<D>) {
+  const { items, itemHeight, itemWidthMsMultipler } = props;
 
   const sortedItems = useMemo(() => {
     return items.slice(0).sort((a: DataItem, b: DataItem) => isAfter(a.date.getTime(), b.date.getTime()) ? 1 : -1);
@@ -47,20 +45,21 @@ function Timeline<D = DataItem>(props: TimelineProps<D>) {
     <div className="timeline-wrapper">
       <div
         style={{
-          width: `${timelineTotalSeconds * TIMELINE_ITEM_WIDTH_MS_TIME_MULTIPLIER}px`,
-          height: `${items.length * TIMELINE_ITEM_HEIGHT}px`
+          width: `${timelineTotalSeconds * itemWidthMsMultipler}px`,
+          height: `${items.length * itemHeight}px`
         }}
         className="timeline"
       >
         {sortedItems.map((sortedItem, index) => (
           <div
             style={{
-              height: `${TIMELINE_ITEM_HEIGHT}px`,
-              width: `${sortedItem.duration * TIMELINE_ITEM_WIDTH_MS_TIME_MULTIPLIER}px`,
-              transform: `translateX(${(sortedItem.date.getTime() - startTime) * TIMELINE_ITEM_WIDTH_MS_TIME_MULTIPLIER}px) translateY(${TIMELINE_ITEM_HEIGHT * index}px)`
+              height: `${itemHeight}px`,
+              width: `${sortedItem.duration * itemWidthMsMultipler}px`,
+              transform: `translateX(${(sortedItem.date.getTime() - startTime) * itemWidthMsMultipler}px) translateY(${itemHeight * index}px)`
             }}
             className="timeline__item"
           >
+            {props.renderItem(sortedItem)}
           </div>
         ))}
       </div>
