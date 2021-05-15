@@ -21,16 +21,17 @@ export const App = () => {
       .then(setBookings)
   }, [])
 
-  const onDrop = (files: File[]) => {
+  const onDrop = async (files: File[]) => {
     const formData = new FormData();
     files.forEach(file => {
       formData.append('files', file);
     })
 
-    fetch(`${apiUrl}/bookings/batch`, {
+    const bookingsResponse: Booking[] = await fetch(`${apiUrl}/bookings/batch`, {
       method: 'POST',
       body: formData
-    })
+    }).then(response => response.json());
+    setBookings(bookingsResponse);
   }
 
   return (
