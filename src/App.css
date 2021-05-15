@@ -1,6 +1,6 @@
 .App {
   text-align: center;
-  padding: 20px;
+  padding: 20px 20px 100px;
 }
 
 .App-header {
@@ -35,4 +35,13 @@
 .App-booking-user {
   display: inline-block;
   width: 80px;
+}
+.App-toolbar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  padding: 20px;
 }

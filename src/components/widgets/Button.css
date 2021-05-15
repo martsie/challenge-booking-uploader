@@ -1,0 +1,17 @@
+.button {
+  background: #137BFA;
+  color: white;
+  font-weight: bold;
+  font-size: 14px;
+  padding: 15px 20px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 5px 10px rgba(0,0,0,0.3);
+  text-transform: uppercase;
+}
+.button--pressed {
+  box-shadow: 0 0 8px rgba(0,0,0,0.3);
+  transform: translateY(1px);
+  background: #1064cb;
+}

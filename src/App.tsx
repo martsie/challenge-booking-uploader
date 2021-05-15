@@ -4,9 +4,10 @@ import Dropzone from 'react-dropzone'
 import './App.css'
 import BookingTimelineItem from './components/BookingTimelineItem';
 import Timeline from './components/Timeline';
+import Button from './components/widgets/Button';
 import { Booking, BookingRecord } from './types/Booking';
 import convertCSVToBookings from './utils/convertCSVToBookings';
-
+import pluralise from './utils/pluralise';
 
 const apiUrl = 'http://localhost:3001';
 
@@ -21,11 +22,11 @@ export const App = () => {
   const [bookings, setBookings] = useState<Booking[]>([])
   const [draftBookings, setDraftBookings] = useState<Booking[]>([])
   const [selectedDraftBookings, setSelectedDraftBookings] = useState<Booking[]>([]);
-  
+
   const sortedBookings = useMemo(() => {
     return bookings.slice(0).concat(draftBookings).sort((a, b) => a.date.getTime() > b.date.getTime() ? 1 : -1);
   }, [bookings, draftBookings]);
-  
+
   const bookingIntervals: Interval[] = useMemo(() => {
     return sortedBookings.map(booking => {
       return {
@@ -34,14 +35,14 @@ export const App = () => {
       };
     });
   }, [sortedBookings]);
-  
+
   const doesBookingOverlap = (booking: Booking) => {
     const bookingIndex = sortedBookings.indexOf(booking);
     return bookingIntervals.some((bookingInterval, index) => {
       return (index !== bookingIndex && areIntervalsOverlapping(bookingInterval, bookingIntervals[bookingIndex]));
     })
   };
-  
+
 
   useEffect(() => {
     fetch(`${apiUrl}/bookings`)
@@ -51,12 +52,13 @@ export const App = () => {
   }, [])
 
   const onDrop = async (files: File[]) => {
-    const bookingGroups:Booking[][] = await Promise.all(files.map(convertCSVToBookings));
+    const bookingGroups: Booking[][] = await Promise.all(files.map(convertCSVToBookings));
     setDraftBookings(draftBookings.slice(0).concat(...bookingGroups));
   }
-  
+
   const toggleSelectedDraftBooking = (booking: Booking) => {
     if (doesBookingOverlap(booking)) {
+      alert(`This booking overlaps with another booking`);
       return;
     }
 
@@ -103,6 +105,13 @@ export const App = () => {
           )}
         />
       </div>
+      {selectedDraftBookings.length > 0 && (
+        <div className="App-toolbar">
+          <Button>
+            {pluralise('Save @count selected event', 'Save @count selected events', selectedDraftBookings.length)}
+          </Button>
+        </div>
+      )}
     </div>
-  )
+  );
 }

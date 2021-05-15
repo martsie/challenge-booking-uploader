@@ -26,8 +26,7 @@
 .timeline__item-wrapper:last-child {
   border-bottom: none;
 }
-.timeline__item {
-}
+
 .timeline__header {
   background: #F9FAFD;
   height: 80px;
