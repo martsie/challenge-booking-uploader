@@ -34,7 +34,7 @@ function createBookingsStore(initialData) {
   return {
     addBookings: addBookings(store),
     addBooking: addBooking(store),
-    getData: () => sortStore(store),
+    getData: () => store,
   };
 }
 

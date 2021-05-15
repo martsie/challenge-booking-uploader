@@ -1,38 +1,57 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import Dropzone from 'react-dropzone'
+import { eachDayOfInterval, addDays } from 'date-fns';
 import './App.css'
+import Timeline from './components/Timeline';
 
 const apiUrl = 'http://localhost:3001'
 
-type TimeStamp = string;
 type Seconds = number;
-type Booking = {
-  time: TimeStamp;
+
+type BookingBase = {
   duration: Seconds;
   userId: string;
+}
+
+type BookingRecord = BookingBase & {
+  time: string;
+}
+
+type Booking = BookingBase & {
+  date: Date;
 }
 
 export const App = () => {
   const [bookings, setBookings] = useState<Booking[]>([])
 
+  const sortAndSetBookings = (bookingRecords: BookingRecord[]) => {
+    bookingRecords.sort((a, b) => a.time > b.time ? 1 : -1);
+    setBookings(bookingRecords.map(({ time, ...restOfBookingRecord }) => ({
+      date: new Date(time),
+      ...restOfBookingRecord,
+    })));
+  }
+
   useEffect(() => {
     fetch(`${apiUrl}/bookings`)
       .then((response) => response.json())
-      .then(setBookings)
+      .then(sortAndSetBookings)
   }, [])
 
   const onDrop = async (files: File[]) => {
-    const formData = new FormData();
+    const formData = new FormData()
     files.forEach(file => {
-      formData.append('files', file);
+      formData.append('files', file)
     })
 
-    const bookingsResponse: Booking[] = await fetch(`${apiUrl}/bookings/batch`, {
+    fetch(`${apiUrl}/bookings/batch`, {
       method: 'POST',
       body: formData
-    }).then(response => response.json());
-    setBookings(bookingsResponse);
+    }).then(response => response.json())
+      .then(sortAndSetBookings)
   }
+
+  
 
   return (
     <div className='App'>
@@ -51,10 +70,15 @@ export const App = () => {
           )}
         </Dropzone>
       </div>
+      <div className="timeline">
+        <Timeline
+          items={bookings}
+        />
+      </div>
       <div className='App-main'>
         <p>Existing bookings:</p>
         {bookings.map((booking, i) => {
-          const date = new Date(booking.time)
+          const date = booking.date;
           const duration = booking.duration / (60 * 1000)
           return (
             <p key={i} className='App-booking'>

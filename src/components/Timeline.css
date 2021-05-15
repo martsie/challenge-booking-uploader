@@ -1,0 +1,12 @@
+.timeline-wrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+.timeline {
+  position: relative;
+  background: #eee;
+}
+.timeline__item {
+  position: absolute;
+  background: white;
+}
