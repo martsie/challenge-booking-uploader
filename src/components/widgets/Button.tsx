@@ -1,17 +1,17 @@
-import React, { ButtonHTMLAttributes, MouseEvent, useState } from 'react';
-import './Button.css';
+import React, { ButtonHTMLAttributes, MouseEvent, useState } from 'react'
+import './Button.css'
 
 const Button: React.FC<ButtonHTMLAttributes<HTMLButtonElement>> = (props) => {
-  const [isPressed, setIsPressed] = useState(false);
+  const [isPressed, setIsPressed] = useState(false)
   const onClick = (e: MouseEvent<HTMLButtonElement>) => {
-    setIsPressed(true);
+    setIsPressed(true)
     
     setTimeout(() => {
-      setIsPressed(false);
+      setIsPressed(false)
       if (props.onClick) {
-        props.onClick(e);
+        props.onClick(e)
       }
-    }, 200);
+    }, 200)
   }
 
   return (
@@ -22,7 +22,7 @@ const Button: React.FC<ButtonHTMLAttributes<HTMLButtonElement>> = (props) => {
     >
       {props.children}
     </button>
-  );
+  )
 }
 
-export default Button;
+export default Button

@@ -1,7 +1,7 @@
-const { areIntervalsOverlapping } = require('date-fns');
+const { areIntervalsOverlapping } = require('date-fns')
 
 function isBookingRecordValid(csvRow) {
-  return !!(csvRow.time && csvRow.duration && csvRow.user_id);
+  return !!(csvRow.time && csvRow.duration && csvRow.user_id)
 }
 
 function doesBookingRecordOverlap(bookingRecord, existingBookings) {
@@ -9,7 +9,7 @@ function doesBookingRecordOverlap(bookingRecord, existingBookings) {
   const bookingIntervals = existingBookings.map(booking => ({
     start: new Date(booking.time),
     end: new Date(booking.time + booking.duration),
-  }));
+  }))
   
   const thisBookingInterval = {
     start: new Date(bookingRecord.time),
@@ -17,8 +17,8 @@ function doesBookingRecordOverlap(bookingRecord, existingBookings) {
   }
   
   return bookingIntervals.some((bookingInterval) => {
-    return areIntervalsOverlapping(bookingInterval, thisBookingInterval);
-  });
+    return areIntervalsOverlapping(bookingInterval, thisBookingInterval)
+  })
 }
 
 module.exports = { isBookingRecordValid, doesBookingRecordOverlap }

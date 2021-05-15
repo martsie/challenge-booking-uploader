@@ -1,5 +1,5 @@
-import { render, screen, fireEvent } from '@testing-library/react';
-import BookingTimelineItem from '../BookingTimelineItem';
+import { render, screen, fireEvent } from '@testing-library/react'
+import BookingTimelineItem from '../BookingTimelineItem'
 
 const testBooking = {
   userId: 'user-1',
@@ -15,15 +15,15 @@ it('renders booking fields in timeline items', () => {
       isActive
       onSelect={jest.fn()}
     />
-  ));
+  ))
 
-  expect(screen.getByText('User: user-1')).toBeInTheDocument();
-  expect(screen.getByText('10:00am')).toBeInTheDocument();
-  expect(screen.getByText('(20 mins)')).toBeInTheDocument();
-});
+  expect(screen.getByText('User: user-1')).toBeInTheDocument()
+  expect(screen.getByText('10:00am')).toBeInTheDocument()
+  expect(screen.getByText('(20 mins)')).toBeInTheDocument()
+})
 
 it('allows bookings to be selected', () => {
-  const onSelect = jest.fn();
+  const onSelect = jest.fn()
   render((
     <BookingTimelineItem
       booking={testBooking}
@@ -32,11 +32,11 @@ it('allows bookings to be selected', () => {
       onSelect={onSelect}
     />
   ))
-  fireEvent.click(screen.getByRole('checkbox'));
+  fireEvent.click(screen.getByRole('checkbox'))
 
-  expect(onSelect).toBeCalledTimes(1);
-  expect(onSelect).toBeCalledWith(testBooking);
-});
+  expect(onSelect).toBeCalledTimes(1)
+  expect(onSelect).toBeCalledWith(testBooking)
+})
 
 it('renders active state', () => {
   render((
@@ -48,10 +48,10 @@ it('renders active state', () => {
     />
   ))
 
-  const timelineItem = screen.getByRole('checkbox');
-  expect(timelineItem).toHaveAttribute('aria-checked', 'true');
-  expect(timelineItem).toHaveAttribute('class', 'booking-timeline-item booking-timeline-item--active');
-});
+  const timelineItem = screen.getByRole('checkbox')
+  expect(timelineItem).toHaveAttribute('aria-checked', 'true')
+  expect(timelineItem).toHaveAttribute('class', 'booking-timeline-item booking-timeline-item--active')
+})
 
 it('renders inactive state', () => {
   render((
@@ -63,10 +63,10 @@ it('renders inactive state', () => {
     />
   ))
 
-  const timelineItem = screen.getByRole('checkbox');
-  expect(timelineItem).toHaveAttribute('aria-checked', 'false');
-  expect(timelineItem).toHaveAttribute('class', 'booking-timeline-item');
-});
+  const timelineItem = screen.getByRole('checkbox')
+  expect(timelineItem).toHaveAttribute('aria-checked', 'false')
+  expect(timelineItem).toHaveAttribute('class', 'booking-timeline-item')
+})
 
 it('renders error state', () => {
   render((
@@ -78,9 +78,9 @@ it('renders error state', () => {
     />
   ))
 
-  const timelineItem = screen.getByRole('checkbox');
-  expect(timelineItem).toHaveAttribute('class', 'booking-timeline-item booking-timeline-item--error');
-});
+  const timelineItem = screen.getByRole('checkbox')
+  expect(timelineItem).toHaveAttribute('class', 'booking-timeline-item booking-timeline-item--error')
+})
 
 it('renders draft state', () => {
   render((
@@ -92,6 +92,6 @@ it('renders draft state', () => {
     />
   ))
 
-  const timelineItem = screen.getByRole('checkbox');
-  expect(timelineItem).toHaveAttribute('class', 'booking-timeline-item booking-timeline-item--draft');
-});
+  const timelineItem = screen.getByRole('checkbox')
+  expect(timelineItem).toHaveAttribute('class', 'booking-timeline-item booking-timeline-item--draft')
+})

@@ -1,68 +1,68 @@
-import { Interval, areIntervalsOverlapping } from 'date-fns';
+import { Interval, areIntervalsOverlapping } from 'date-fns'
 import { useState, useEffect, useMemo } from 'react'
 import Dropzone from 'react-dropzone'
 import './App.css'
-import BookingTimelineItem from './components/BookingTimelineItem';
-import Timeline from './components/Timeline';
-import Button from './components/widgets/Button';
-import { Booking, BookingRecord } from './types/Booking';
-import convertCSVToDraftBookings from './utils/convertCSVToDraftBookings';
-import pluralise from './utils/pluralise';
+import BookingTimelineItem from './components/BookingTimelineItem'
+import Timeline from './components/Timeline'
+import Button from './components/widgets/Button'
+import { Booking, BookingRecord } from './types/Booking'
+import convertCSVToDraftBookings from './utils/convertCSVToDraftBookings'
+import pluralise from './utils/pluralise'
 
-const apiUrl = 'http://localhost:3001';
+const apiUrl = 'http://localhost:3001'
 
 const processBookingResponse = (bookingRecords: BookingRecord[]) => {
   return bookingRecords.map(({ time, ...restOfBookingRecord }) => ({
     date: new Date(time),
     ...restOfBookingRecord,
-  }));
+  }))
 }
 
 export const App = () => {
   const [bookings, setBookings] = useState<Booking[]>([])
   const [draftBookings, setDraftBookings] = useState<Booking[]>([])
-  const [selectedDraftBookings, setSelectedDraftBookings] = useState<Booking[]>([]);
+  const [selectedDraftBookings, setSelectedDraftBookings] = useState<Booking[]>([])
 
   const sortedBookings = useMemo(() => {
-    return bookings.slice(0).concat(draftBookings).sort((a, b) => a.date.getTime() > b.date.getTime() ? 1 : -1);
-  }, [bookings, draftBookings]);
+    return bookings.slice(0).concat(draftBookings).sort((a, b) => a.date.getTime() > b.date.getTime() ? 1 : -1)
+  }, [bookings, draftBookings])
 
   const bookingIntervals: Interval[] = useMemo(() => {
     return sortedBookings.map(booking => {
       return {
         start: booking.date,
         end: new Date(booking.date.getTime() + booking.duration),
-      };
-    });
-  }, [sortedBookings]);
+      }
+    })
+  }, [sortedBookings])
 
   const doesBookingOverlap = (booking: Booking) => {
-    const bookingIndex = sortedBookings.indexOf(booking);
+    const bookingIndex = sortedBookings.indexOf(booking)
     return bookingIntervals.some((bookingInterval, index) => {
-      return (index !== bookingIndex && areIntervalsOverlapping(bookingInterval, bookingIntervals[bookingIndex]));
-    });
-  };
+      return (index !== bookingIndex && areIntervalsOverlapping(bookingInterval, bookingIntervals[bookingIndex]))
+    })
+  }
   
   const fetchLatestBookings = async () => {
     const newBookings = await fetch(`${apiUrl}/bookings`)
       .then((response) => response.json())
-      .then(processBookingResponse);
-    setBookings(newBookings);
-    setDraftBookings([]);
-    setSelectedDraftBookings([]);
+      .then(processBookingResponse)
+    setBookings(newBookings)
+    setDraftBookings([])
+    setSelectedDraftBookings([])
   }
 
   useEffect(() => {
-    fetchLatestBookings();
+    fetchLatestBookings()
   }, [])
 
   const onDrop = async (files: File[]) => {
-    const bookingGroups: Booking[][] = await Promise.all(files.map(convertCSVToDraftBookings));
-    setDraftBookings(draftBookings.slice(0).concat(...bookingGroups));
+    const bookingGroups: Booking[][] = await Promise.all(files.map(convertCSVToDraftBookings))
+    setDraftBookings(draftBookings.slice(0).concat(...bookingGroups))
   }
   
   const presentError = (e: Error) => {
-    alert(e.message);
+    alert(e.message)
   }
   
   const onSaveEvents = async () => {
@@ -71,42 +71,42 @@ export const App = () => {
         user_id: booking.userId,
         duration: booking.duration / 60 / 1000,
         time: booking.date.toISOString(),
-      }));
+      }))
       const response = await fetch(`${apiUrl}/bookings/batch`, {
         method: 'POST',
         body: JSON.stringify(bookingInputToSubmit),
         headers: {
           'Content-Type': 'application/json',
         },
-      });
+      })
       if (response.status === 422) {
-        const responseJson = await response.json();
-        throw new Error(responseJson.message);
+        const responseJson = await response.json()
+        throw new Error(responseJson.message)
       }
-      fetchLatestBookings();
+      fetchLatestBookings()
     } catch (e) {
-      presentError(e);
+      presentError(e)
     }
   }
 
   const toggleSelectedDraftBooking = (booking: Booking) => {
     if (!booking.isDraft) {
-      return;
+      return
     }
 
     if (doesBookingOverlap(booking)) {
-      alert(`This booking overlaps with another booking`);
-      return;
+      alert(`This booking overlaps with another booking`)
+      return
     }
 
-    const currentIndex = selectedDraftBookings.indexOf(booking);
+    const currentIndex = selectedDraftBookings.indexOf(booking)
     if (currentIndex > -1) {
-      const newDraftBookings = selectedDraftBookings.slice(0);
+      const newDraftBookings = selectedDraftBookings.slice(0)
       newDraftBookings.splice(currentIndex, 1)
-      setSelectedDraftBookings(newDraftBookings);
+      setSelectedDraftBookings(newDraftBookings)
     }
     else {
-      setSelectedDraftBookings([...selectedDraftBookings, booking]);
+      setSelectedDraftBookings([...selectedDraftBookings, booking])
     }
   }
 
@@ -150,5 +150,5 @@ export const App = () => {
         </div>
       )}
     </div>
-  );
+  )
 }

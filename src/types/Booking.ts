@@ -1,15 +1,15 @@
-export type Seconds = number;
+export type Seconds = number
 
 export type BookingBase = {
-  duration: Seconds;
-  userId: string;
-  isDraft?: boolean;
+  duration: Seconds
+  userId: string
+  isDraft?: boolean
 }
 
 export type BookingRecord = BookingBase & {
-  time: string;
+  time: string
 }
 
 export type Booking = BookingBase & {
-  date: Date;
+  date: Date
 }

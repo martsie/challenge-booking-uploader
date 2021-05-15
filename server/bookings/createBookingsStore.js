@@ -5,7 +5,7 @@ const addBooking = (store) => (bookingRecord) => {
     throw new Error(`Booking record is invalid. Provided with: ${JSON.stringify(bookingRecord)}`)
   }
   if (doesBookingRecordOverlap(bookingRecord, store)) {
-    throw new Error(`Booking overlaps: ${JSON.stringify(bookingRecord)}`);
+    throw new Error(`Booking overlaps: ${JSON.stringify(bookingRecord)}`)
   }
 
   store.push({
@@ -15,16 +15,16 @@ const addBooking = (store) => (bookingRecord) => {
   })
   
   return store
-};
+}
 
 const addBookings = (store) => (data) => {
-  data.forEach(item => addBooking(store)(item));
+  data.forEach(item => addBooking(store)(item))
   
   return store
 }
 
 function createBookingsStore(initialData) {
-  const store = [];
+  const store = []
 
   addBookings(store)(initialData)
 
@@ -32,7 +32,7 @@ function createBookingsStore(initialData) {
     addBookings: addBookings(store),
     addBooking: addBooking(store),
     getData: () => store,
-  };
+  }
 }
 
-module.exports = createBookingsStore;
+module.exports = createBookingsStore

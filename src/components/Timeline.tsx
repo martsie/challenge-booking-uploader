@@ -1,48 +1,48 @@
-import React, { useMemo } from 'react';
-import { isAfter, eachDayOfInterval, startOfDay, addDays, format } from 'date-fns';
-import './Timeline.css';
+import React, { useMemo } from 'react'
+import { isAfter, eachDayOfInterval, startOfDay, addDays, format } from 'date-fns'
+import './Timeline.css'
 
 interface DataItem {
-  date: Date;
-  duration: number;
+  date: Date
+  duration: number
 }
 
 interface TimelineProps<D extends DataItem> {
-  items: D[];
-  renderTimelineItem: (item: D, index: number) => React.ReactElement;
-  itemHeight: number;
-  itemWidthMsMultipler: number;
+  items: D[]
+  renderTimelineItem: (item: D, index: number) => React.ReactElement
+  itemHeight: number
+  itemWidthMsMultipler: number
 }
 
-const VERTICAL_BUFFER_BETWEEN_TIMELINE_ITEMS = 20;
-const HEADER_HEIGHT = 80;
+const VERTICAL_BUFFER_BETWEEN_TIMELINE_ITEMS = 20
+const HEADER_HEIGHT = 80
 
 function Timeline<D extends DataItem>(props: TimelineProps<D>) {
-  const { items, itemHeight, itemWidthMsMultipler } = props;
+  const { items, itemHeight, itemWidthMsMultipler } = props
 
   const sortedItems = useMemo(() => {
-    return items.slice(0).sort((a: DataItem, b: DataItem) => isAfter(a.date.getTime(), b.date.getTime()) ? 1 : -1);
-  }, [items]);
+    return items.slice(0).sort((a: DataItem, b: DataItem) => isAfter(a.date.getTime(), b.date.getTime()) ? 1 : -1)
+  }, [items])
 
   if (items.length === 0) {
     return <div>No items</div>
   }
 
-  const firstItem = sortedItems[0];
-  const lastItem = sortedItems[sortedItems.length - 1];
+  const firstItem = sortedItems[0]
+  const lastItem = sortedItems[sortedItems.length - 1]
 
-  const firstDate = firstItem.date;
-  const lastDate = lastItem.date;
+  const firstDate = firstItem.date
+  const lastDate = lastItem.date
 
   const dayDates = eachDayOfInterval({
     start: startOfDay(firstDate),
     end: startOfDay(addDays(new Date(lastDate), 1)),
-  });
+  })
 
-  const startTime = dayDates[0].getTime();
-  const endTime = dayDates[dayDates.length - 1].getTime();
+  const startTime = dayDates[0].getTime()
+  const endTime = dayDates[dayDates.length - 1].getTime()
 
-  const timelineTotalSeconds = endTime - startTime;
+  const timelineTotalSeconds = endTime - startTime
 
   return (
     <div className="timeline-wrapper">
@@ -94,7 +94,7 @@ function Timeline<D extends DataItem>(props: TimelineProps<D>) {
         </div>
       </div>
     </div>
-  );
+  )
 }
 
-export default Timeline;
+export default Timeline
