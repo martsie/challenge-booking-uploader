@@ -34,12 +34,14 @@
   top: 0;
   z-index: 1;
   border-bottom: 3px solid #EAECF2;
+  font-size: 40px;
+  color: rgba(0,0,0,0.6);
 }
 .timeline__header-item {
   position: absolute;
   height: 80px;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
   justify-content: center;
   border-right: 3px solid #EAECF2;
@@ -49,6 +51,7 @@
 }
 .timeline__header-item-day {
   font-weight: bold;
+  margin-left: 10px;
 }
 .timeline__header-item-month {
 

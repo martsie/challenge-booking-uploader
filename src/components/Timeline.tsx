@@ -64,8 +64,8 @@ function Timeline<D extends DataItem>(props: TimelineProps<D>) {
                 }}
                 className="timeline__header-item"
               >
-                <span className="timeline__header-item-day">{format(dayDate, 'd')}</span>
                 <span className="timeline__header-item-month">{format(dayDate, 'MMMM')}</span>
+                <span className="timeline__header-item-day">{format(dayDate, 'do')}</span>
               </div>
             ))}
           </div>
