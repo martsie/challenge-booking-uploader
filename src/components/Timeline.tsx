@@ -9,8 +9,7 @@ interface DataItem {
 
 interface TimelineProps<D extends DataItem> {
   items: D[];
-  renderTimelineItem: (item: D) => React.ReactElement;
-  renderInfoItem: (item: D) => React.ReactElement;
+  renderTimelineItem: (item: D, index: number) => React.ReactElement;
   itemHeight: number;
   itemWidthMsMultipler: number;
 }
@@ -87,7 +86,7 @@ function Timeline<D extends DataItem>(props: TimelineProps<D>) {
                 }}
                 className="timeline__item"
               >
-                {props.renderTimelineItem(sortedItem)}
+                {props.renderTimelineItem(sortedItem, index)}
               </div>
             </div>
           ))}

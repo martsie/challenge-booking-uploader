@@ -1,3 +1,4 @@
+import { Interval, areIntervalsOverlapping } from 'date-fns';
 import { useState, useEffect, useMemo } from 'react'
 import Dropzone from 'react-dropzone'
 import './App.css'
@@ -5,6 +6,7 @@ import BookingTimelineItem from './components/BookingTimelineItem';
 import Timeline from './components/Timeline';
 import { Booking, BookingRecord } from './types/Booking';
 import convertCSVToBookings from './utils/convertCSVToBookings';
+
 
 const apiUrl = 'http://localhost:3001';
 
@@ -23,7 +25,22 @@ export const App = () => {
     return bookings.slice(0).concat(draftBookings).sort((a, b) => a.date.getTime() > b.date.getTime() ? 1 : -1);
   }, [bookings, draftBookings]);
   
-  console.log(sortedBookings, 'sorted bookings');
+  const bookingIntervals: Interval[] = useMemo(() => {
+    return sortedBookings.map(booking => {
+      return {
+        start: booking.date,
+        end: new Date(booking.date.getTime() + booking.duration),
+      };
+    });
+  }, [sortedBookings]);
+  
+  const doesBookingOverlap = (booking: Booking) => {
+    const bookingIndex = sortedBookings.indexOf(booking);
+    return bookingIntervals.some((bookingInterval, index) => {
+      return (index !== bookingIndex && areIntervalsOverlapping(bookingInterval, bookingIntervals[bookingIndex]));
+    })
+  };
+  
 
   useEffect(() => {
     fetch(`${apiUrl}/bookings`)
@@ -60,12 +77,10 @@ export const App = () => {
           itemHeight={80}
           itemWidthMsMultipler={0.00001}
           renderTimelineItem={(booking) => (
-            <BookingTimelineItem booking={booking} />
-          )}
-          renderInfoItem={(booking) => (
-            <div>
-              UserId: {booking.userId}
-            </div>
+            <BookingTimelineItem
+              booking={booking}
+              isValid={bookings.includes(booking) || !doesBookingOverlap(booking)}
+            />
           )}
         />
       </div>
