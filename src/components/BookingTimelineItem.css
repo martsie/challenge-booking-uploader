@@ -24,3 +24,15 @@
   border-color: #137BFA;
   background-color: #E6F3FF;
 }
+.booking-timeline-item__user {
+  margin: 0;
+  font-size: 14px;
+}
+.booking-timeline-item__date {
+  font-size: 12px;
+  margin: 5px 0 0;
+}
+.booking-timeline-item__duration {
+  font-size: 12px;
+  margin: 0;
+}

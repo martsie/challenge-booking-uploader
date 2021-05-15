@@ -1,3 +1,4 @@
+import format from 'date-fns/format';
 import { Booking } from '../types/Booking';
 import './BookingTimelineItem.css';
 
@@ -28,8 +29,9 @@ const BookingTimelineItem: React.FC<BookingTimelineItemProps> = (props) => {
       onClick={booking.isDraft ? () => onSelect(booking) : undefined}
       type="button"
     >
-      User: {booking.userId}
-      {booking.isDraft ? 'Is draft' : ''}
+      <h2 className="booking-timeline-item__user">User: {booking.userId}</h2>
+      <p className="booking-timeline-item__date">{format(booking.date, 'h:mmaaa')}</p>
+      <p className="booking-timeline-item__duration">({booking.duration / 1000 / 60} mins)</p>
     </button>
   );
 };
